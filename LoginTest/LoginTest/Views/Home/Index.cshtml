@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/CSS/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="~/Content/CSS/templatemo_style.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.cookie.js"></script>
+    <!--APPID要换成实际申请到的APPID，REDIRECTURI换成实际的REDIRECTURI-->
+    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="APPID" data-redirecturi="REDIRECTURI" charset="utf-8"></script>
+</head>
+<body class="templatemo-bg-gray">
+    <div class="container">
+        <div class="col-md-12">
+            <h1 class="margin-bottom-15">Login from here</h1>
+            <form class="form-horizontal templatemo-container templatemo-login-form-1 margin-bottom-30" role="form" action="#" method="post" id="userinfo" onsubmit="return submitTest()">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div class="control-wrapper">
+                            <label for="username" class="control-label fa-label"><i class="fa fa-user fa-medium"></i></label>
+                            <input type="text" class="form-control" id="username" placeholder="Username">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="control-wrapper">
+                            <label for="password" class="control-label fa-label"><i class="fa fa-lock fa-medium"></i></label>
+                            <input type="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="checkbox control-wrapper">
+                            <label>
+                                
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="control-wrapper">
+                            <input type="submit" id="login" value="Log in" class="btn btn-info">
+                            <a href="#" class="text-right pull-right" id="pwd">Forgot password?</a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>Login with: </label>
+                        <div class="inline-block">
+                            @*<a href="#"><i class="fa fa-facebook-square login-with"></i></a>
+                                <a href="#"><i class="fa fa-twitter-square login-with"></i></a>
+                                <a href="#"><i class="fa fa-google-plus-square login-with"></i></a>
+                                <a href="#"><i class="fa fa-tumblr-square login-with"></i></a>
+                                <a href="#"><i class="fa fa-github-square login-with"></i></a>*@
+                            <a href="#"><i id="qqLoginBtn" class="fa fa-qq login-with"></i></a>
+                            <a href="#"><i class="fa fa-weixin login-with"></i></a>
+                            <a href="#"><i class="fa fa-weibo login-with"></i></a>
+                            <a href="#"><i class="fa fa-facebook-square login-with"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="text-center">
+                <a id="newaccount" href="#" class="templatemo-create-new">Create new account <i class="fa fa-arrow-circle-o-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            //link to forgetpwd page
+            $('#pwd').click(function () {
+                window.location.href = "/home/forgetpwd";
+            });
+
+            $('#newaccount').click(function () {
+                window.location.href = "/home/creataccount";
+            });
+
+            //submit userinfo
+            $('#userinfo').submit(function () {
+                var userinfo = {
+                    username: $('#username').val(),
+                    password: $('#password').val()
+                };
+
+                $.ajax({
+                    type: 'post',
+                    url: '/home/checkinfo',
+                    data: userinfo,
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+            });
+
+            //判断之前是否有设置cookie，如果有，则设置【记住我】选择框
+            if ($.cookie('absms_crm2_userName') != undefined) {
+                $("#rememberMe").attr("checked", true);
+            } else {
+                $("#rememberMe").attr("checked", false);
+            }
+
+            //读取cookie
+            if ($('#rememberMe:checked').length > 0) {
+                $('#username').val($.cookie('absms_crm2_userName'));
+                $('#password').val($.cookie('absms_crm2_password'));
+            }
+
+            //监听【记住我】事件
+            $("#rememberMe").click(function () {
+                if ($('#rememberMe:checked').length > 0) {//设置cookie
+                    $.cookie('absms_crm2_userName', $('#username').val());
+                    $.cookie('absms_crm2_password', $('#password').val());
+                } else {//清除cookie
+                    $.removeCookie('absms_crm2_userName');
+                    $.removeCookie('absms_crm2_password');
+                }
+            });
+        });
+
+        function submitTest() {
+            return false;
+        }
+    </script>
+
+</body>
+</html>
